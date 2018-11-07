@@ -53,8 +53,8 @@ type Bloch
     view_elevation::Float64
     view_azimuth::Float64
     elements # our points/vectors
-    colors::Vector{ASCIIString}
-    title::ASCIIString
+    colors::Vector{String}
+    title::String
 end
 
 # Standard Initialization
@@ -76,9 +76,9 @@ Bloch() = Bloch([0.5,0.1,0.1,0.02],
 # method to add element to Bloch Sphere
 function add_element(b::Bloch, 
                                         coord::Vector;
-                                        kind = "vector"::ASCIIString, 
+                                        kind = "vector"::String, 
                                         label =""::AbstractString, 
-                                        linestyle = "-"::ASCIIString,
+                                        linestyle = "-"::String,
                                         markerSize = 20::Int)
 
     #linestyles = ['_', '-', '--', ':']

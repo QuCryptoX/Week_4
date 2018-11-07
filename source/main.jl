@@ -1,6 +1,3 @@
-Pkg.add("Convex");
-Pkg.add("SCS");
-
 using PyPlot
 using Interact
 using Convex;

@@ -17,3 +17,4 @@ function kron(a::Array{Float64,2}, b::Convex.Variable)
   	return foldl(vcat, rows)
 end
 
+

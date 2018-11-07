@@ -35,3 +35,4 @@ function makeM(realM::Convex.TransposeAtom,imagM::Convex.TransposeAtom)
 
         return foldl(vcat, rows)
 end
+

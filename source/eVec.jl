@@ -9,3 +9,4 @@ function eVec(n,j)
 	vO[j] = 1;
 	return vO;
 end
+
