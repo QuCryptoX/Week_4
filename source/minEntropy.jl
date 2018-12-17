@@ -5,41 +5,41 @@
 # dA:     dimension of A
 
 function minEntropy(rhoAE,dA)
-    
+
 	# Check whether we have a valid state
     	if(isQuantumState(rhoAE) == 0)
         	error("Not a valid quantum state");
     	end
-    
+
     	# Check the dimensions of the state
     	(d1,d2) = size(rhoAE);
     	if(d1 < dA)
         	error("Incorrect dimension dA: Smaller than matrix size.");
     	end
-    
+
     	# Compute the dimension of E (may be 1)
     	dE = Int(round(d1/dA));
     	if (dE*dA != d1)
         	error("Incorrect dimension dA: does not divide matrix size.");
     	end
-    
+
     	# Construct the identity matrix on A
     	idA = eye(dA);
-    
+
     	# Julia deals with real variables only, so we need to map the complex problem onto a real one
     	# find the complex and real parts of the input
     	realRho = real(rhoAE);
     	imRho = imag(rhoAE);
     	mapRho = [realRho -imRho;imRho realRho];
-    
+
     	# set up the optimization problem
-	if(dE == 1) 
+	if(dE == 1)
 		# unconditional min-entropy
 
 		lambda = Variable(1);
 		problem = minimize(lambda);
 		problem.constraints += ([(lambda * eye(2* dA) - mapRho) in :SDP]);
-	else 
+	else
 		# conditional min-entropy
 
     		# set up the SDP variables
@@ -50,12 +50,10 @@ function minEntropy(rhoAE,dA)
     		problem.constraints += ([makeM(sigmaEReal,sigmaEImag) in :SDP]);
     		problem.constraints += ([(makeM(kron(idA,sigmaEReal),kron(idA,sigmaEImag)) - mapRho) in :SDP]);
 	end
-    
-    	solve!(problem, SCSSolver(verbose=false))
+
+    	solve!(problem, SCSSolver(eps=1e-5,rho_x = 1e-4,verbose=false, max_iters=2500))
     	problem.status
     	problem.optval
 
 	return (-log2(problem.optval));
 end
-
-
